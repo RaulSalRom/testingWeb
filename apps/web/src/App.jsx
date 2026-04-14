@@ -6,6 +6,8 @@ import ScrollToTop from './components/ScrollToTop.jsx';
 import HomePage from './pages/HomePage.jsx';
 import PropertiesPage from './pages/PropertiesPage.jsx';
 import PropertyDetailPage from './pages/PropertyDetailPage.jsx';
+import LoginPage from './pages/LoginPage.jsx';
+import AdminPanel from './pages/AdminPanel.jsx';
 
 /**
  * Aplicación principal: Corina Capital
@@ -24,6 +26,8 @@ function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/properties" element={<PropertiesPage />} />
         <Route path="/properties/:id" element={<PropertyDetailPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/admin" element={<AdminPanel />} />
         
         {/* Manejo de Rutas Inexistentes (404) */}
         <Route path="*" element={

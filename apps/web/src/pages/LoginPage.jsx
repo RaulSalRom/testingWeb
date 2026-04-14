@@ -96,10 +96,8 @@ const LoginPage = () => {
                 </Button>
                 
                 <p className="text-sm text-center text-muted-foreground">
-                  ¿No tienes cuenta?{' '}
-                  <Link to="/signup" className="text-primary hover:underline font-medium">
-                    Regístrate aquí
-                  </Link>
+                  ¿Necesitas acceso de administrador?{' '}
+                  <span className="text-primary font-medium">Contacta al equipo de Corina Capital</span>
                 </p>
               </CardFooter>
             </form>

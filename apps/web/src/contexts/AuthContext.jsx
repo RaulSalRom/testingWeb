@@ -74,9 +74,12 @@ export const AuthProvider = ({ children }) => {
     toast.success('Sesión cerrada');
   };
 
+  const isAdmin = currentUser?.role === 'admin' || currentUser?.role === 'editor';
+
   const value = {
     currentUser,
     isAuthenticated: pb.authStore.isValid,
+    isAdmin,
     login,
     signup,
     logout,

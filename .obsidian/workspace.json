@@ -11,14 +11,10 @@
             "id": "e6c3486287700561",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "SISTEMA_PERMISOS.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "SISTEMA_PERMISOS"
+              "title": "Nueva pestaña"
             }
           }
         ]
@@ -94,7 +90,6 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "SISTEMA_PERMISOS.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -104,7 +99,7 @@
                 "unlinkedCollapsed": true
               },
               "icon": "links-coming-in",
-              "title": "Enlaces entrantes de SISTEMA_PERMISOS"
+              "title": "Enlaces entrantes"
             }
           },
           {
@@ -113,12 +108,11 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "SISTEMA_PERMISOS.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               },
               "icon": "links-going-out",
-              "title": "Enlaces salientes de SISTEMA_PERMISOS"
+              "title": "Enlaces salientes"
             }
           },
           {
@@ -156,13 +150,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "SISTEMA_PERMISOS.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Esquema de SISTEMA_PERMISOS"
+              "title": "Esquema"
             }
           }
         ]
@@ -185,19 +178,25 @@
   },
   "active": "e6c3486287700561",
   "lastOpenFiles": [
-    "apps/pocketbase/pb_data/data.db-shm",
-    "apps/pocketbase/pb_data/data.db-wal",
-    "README.md",
-    "apps/pocketbase/pb_data/auxiliary.db-shm",
-    "apps/pocketbase/pb_data/auxiliary.db-wal",
     "DEPLOYMENT_GUIDE.md",
-    "MIGRATION_GUIDE.md",
-    "apps/web/src/lib/logger.js",
-    "apps/web/src/lib/constants.js",
-    "apps/web/src/lib/schemas.js",
-    "apps/web/src/hooks/usePocketbaseQuery.js",
-    "apps/web/src/services/propertyService.js",
-    "apps/web/src/services",
-    "SISTEMA_PERMISOS.md"
+    "project_documentation.md",
+    "keys.md",
+    "database/pocketbase",
+    "database/pb_migrations/1776161318_updated_properties.js",
+    "database/pb_migrations/1776161310_updated_users.js",
+    "database/pb_migrations/1773824320_002_seed_properties_15_records.js",
+    "database/pb_migrations/1773824296_001_created_favorites.js",
+    "database/pb_migrations/1773824294_001_created_properties.js",
+    "database/pb_migrations/1769164585_set_rate_limits.js",
+    "database/pb_migrations/1769159103_disable_auth_alert_superusers.js",
+    "database/pb_migrations/1759383931_initial_app_settings.js",
+    "database/pb_migrations",
+    "database/pb_data/storage/pbc_2224901212/000000000000001/thumbs_222336_7sw1d97ur5.jpg/100x100_222336_7sw1d97ur5.jpg",
+    "database/pb_data/storage/pbc_2224901212/000000000000001/thumbs_222336_7sw1d97ur5.jpg",
+    "database/pb_data/storage/pbc_2224901212/000000000000001/222336_7sw1d97ur5.jpg",
+    "web/node_modules/@radix-ui/react-slot/README.md",
+    "README.md",
+    "SISTEMA_PERMISOS.md",
+    "MIGRATION_GUIDE.md"
   ]
 }

@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import Header from '@/components/Header.jsx';
@@ -8,46 +8,32 @@ import PropertyCard from '@/components/PropertyCard.jsx';
 import PropertyFilter from '@/components/PropertyFilter.jsx';
 import SearchBar from '@/components/SearchBar.jsx';
 import LoadingSpinner from '@/components/LoadingSpinner.jsx';
-import pb from '@/lib/pocketbaseClient';
+import { usePocketbaseSearch } from '@/hooks/usePocketbaseQuery';
+import { logError } from '@/lib/logger';
+import { TIMING } from '@/lib/constants';
 
 const PropertiesPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [properties, setProperties] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category') || 'all');
 
-  useEffect(() => {
-    const fetchProperties = async () => {
-      setLoading(true);
-      try {
-        let filter = '';
-        
-        if (selectedCategory && selectedCategory !== 'all') {
-          filter = `category = "${selectedCategory}"`;
-        }
+  // Usar hook de búsqueda con debounce automático
+  const { data: allProperties, loading, error } = usePocketbaseSearch(
+    'properties',
+    searchQuery,
+    ['name', 'description', 'location'],
+    TIMING.DEBOUNCE_SEARCH
+  );
 
-        if (searchQuery) {
-          const searchFilter = `(name ~ "${searchQuery}" || location ~ "${searchQuery}")`;
-          filter = filter ? `${filter} && ${searchFilter}` : searchFilter;
-        }
+  // Loguear errores si ocurren
+  if (error) {
+    logError(error, 'PropertiesPage.usePocketbaseSearch');
+  }
 
-        const records = await pb.collection('properties').getFullList({
-          filter: filter || undefined,
-          sort: '-created',
-          $autoCancel: false
-        });
-
-        setProperties(records);
-      } catch (error) {
-        console.error('Error fetching properties:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProperties();
-  }, [selectedCategory, searchQuery]);
+  // Filtrar por categoría después de la búsqueda
+  const properties = selectedCategory && selectedCategory !== 'all'
+    ? allProperties.filter(prop => prop.category === selectedCategory)
+    : allProperties;
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
@@ -102,6 +88,13 @@ const PropertiesPage = () => {
             {loading ? (
               <div className="flex justify-center py-32">
                 <LoadingSpinner size="lg" />
+              </div>
+            ) : error ? (
+              <div className="text-center py-32 bg-background rounded-2xl border border-border/50">
+                <p className="text-2xl font-medium text-foreground mb-3">Error al cargar propiedades</p>
+                <p className="text-muted-foreground">
+                  Ha ocurrido un error. Intenta recargar la página.
+                </p>
               </div>
             ) : properties.length === 0 ? (
               <div className="text-center py-32 bg-background rounded-2xl border border-border/50">

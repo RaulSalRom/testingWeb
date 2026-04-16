@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { ArrowRight, Map, TrendingUp, Key, Sun } from 'lucide-react';
@@ -8,29 +8,20 @@ import Header from '@/components/Header.jsx';
 import Footer from '@/components/Footer.jsx';
 import PropertyCard from '@/components/PropertyCard.jsx';
 import LoadingSpinner from '@/components/LoadingSpinner.jsx';
-import pb from '@/lib/pocketbaseClient';
+import { usePocketbaseQuery } from '@/hooks/usePocketbaseQuery';
+import { logError } from '@/lib/logger';
 
 const HomePage = () => {
-  const [featuredProperties, setFeaturedProperties] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // Obtener propiedades destacadas (las 4 más recientes) usando hook centralizado
+  const { data: featuredProperties, loading, error } = usePocketbaseQuery('properties', {
+    sort: '-created',
+    limit: 4
+  });
 
-  useEffect(() => {
-    const fetchFeaturedProperties = async () => {
-      try {
-        const records = await pb.collection('properties').getList(1, 4, {
-          sort: '-created',
-          $autoCancel: false
-        });
-        setFeaturedProperties(records.items);
-      } catch (error) {
-        console.error('Error fetching properties:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchFeaturedProperties();
-  }, []);
+  // Loguear errores si ocurren
+  if (error) {
+    logError(error, 'HomePage.usePocketbaseQuery');
+  }
 
   return (
     <>
@@ -140,6 +131,10 @@ const HomePage = () => {
             {loading ? (
               <div className="flex justify-center py-20">
                 <LoadingSpinner size="lg" />
+              </div>
+            ) : error ? (
+              <div className="text-center py-20 bg-background rounded-2xl border border-border/50">
+                <p className="text-lg text-muted-foreground">Error al cargar las propiedades destacadas</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

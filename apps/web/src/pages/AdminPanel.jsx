@@ -26,14 +26,23 @@ import {
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
 import { useAuth } from '@/contexts/AuthContext.jsx';
-import pb from '@/lib/pocketbaseClient';
 import { toast } from 'sonner';
+import propertyService from '@/services/propertyService';
+import { usePocketbaseQuery } from '@/hooks/usePocketbaseQuery';
+import { propertyCreateSchema, validateSchema } from '@/lib/schemas';
+import { PROPERTY_CATEGORIES, SUCCESS_MESSAGES, ERROR_MESSAGES } from '@/lib/constants';
+import { logError } from '@/lib/logger';
+import pb from '@/lib/pocketbaseClient';
 
 const AdminPanel = () => {
   const navigate = useNavigate();
   const { currentUser, isAdmin, logout, initialLoading } = useAuth();
-  const [properties, setProperties] = useState([]);
-  const [loading, setLoading] = useState(true);
+  
+  // Usar hook para obtener propiedades
+  const { data: properties, loading, error, refetch } = usePocketbaseQuery('properties', {
+    sort: '-created'
+  });
+
   const [dialogOpen, setDialogOpen] = useState(false);
   const [editingProperty, setEditingProperty] = useState(null);
   const [formData, setFormData] = useState({
@@ -42,9 +51,7 @@ const AdminPanel = () => {
     description: '',
     price: '',
     location: '',
-    availability: true,
-    detailed_features: '',
-    contact_info: ''
+    availability: true
   });
   const [images, setImages] = useState([]);
   const [saving, setSaving] = useState(false);
@@ -55,25 +62,10 @@ const AdminPanel = () => {
     }
   }, [initialLoading, isAdmin, navigate]);
 
-  useEffect(() => {
-    if (isAdmin) {
-      fetchProperties();
-    }
-  }, [isAdmin]);
-
-  const fetchProperties = async () => {
-    try {
-      const records = await pb.collection('properties').getFullList({
-        sort: '-created',
-        $autoCancel: false
-      });
-      setProperties(records);
-    } catch (error) {
-      console.error('Error fetching properties:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // Loguear errores si hay
+  if (error) {
+    logError(error, 'AdminPanel.usePocketbaseQuery');
+  }
 
   const resetForm = () => {
     setFormData({
@@ -135,45 +127,35 @@ const AdminPanel = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validar datos antes de enviar
+    const validation = validateSchema(formData, propertyCreateSchema);
+    if (!validation.success) {
+      toast.error('Datos inválidos');
+      Object.values(validation.errors).forEach(error => console.log(error));
+      return;
+    }
+
     setSaving(true);
 
     try {
-      const data = {
-        name: formData.name,
-        category: formData.category || null,
-        description: formData.description || null,
-        price: formData.price ? parseFloat(formData.price) : null,
-        location: formData.location,
-        availability: formData.availability,
-        detailed_features: formData.detailed_features || null,
-        contact_info: formData.contact_info || null
-      };
-
-      const formPayload = new FormData();
-      Object.entries(data).forEach(([key, value]) => {
-        if (value !== null && value !== undefined) {
-          formPayload.append(key, value);
-        }
-      });
-
-      images.forEach(img => {
-        formPayload.append('images', img.file);
-      });
-
       if (editingProperty) {
-        await pb.collection('properties').update(editingProperty.id, formPayload);
-        toast.success('Propiedad actualizada correctamente');
+        // Actualizar propiedad usando service centralizado
+        await propertyService.update(editingProperty.id, validation.data);
+        toast.success(SUCCESS_MESSAGES.UPDATED);
       } else {
-        await pb.collection('properties').create(formPayload);
-        toast.success('Propiedad creada correctamente');
+        // Crear propiedad nueva
+        await propertyService.create(validation.data);
+        toast.success(SUCCESS_MESSAGES.CREATED);
       }
 
       setDialogOpen(false);
       resetForm();
-      fetchProperties();
+      // Refetch usando el hook
+      refetch();
     } catch (error) {
-      console.error('Error saving property:', error);
-      toast.error('Error al guardar la propiedad');
+      logError(error, 'AdminPanel.handleSubmit');
+      toast.error(ERROR_MESSAGES.VALIDATION_ERROR);
     } finally {
       setSaving(false);
     }
@@ -182,12 +164,12 @@ const AdminPanel = () => {
   const handleDelete = async (property) => {
     if (window.confirm(`¿Estás seguro de eliminar "${property.name}"?`)) {
       try {
-        await pb.collection('properties').delete(property.id);
-        toast.success('Propiedad eliminada');
-        fetchProperties();
+        await propertyService.deleteProperty(property.id);
+        toast.success(SUCCESS_MESSAGES.DELETED);
+        refetch();
       } catch (error) {
-        console.error('Error deleting property:', error);
-        toast.error('Error al eliminar la propiedad');
+        logError(error, 'AdminPanel.handleDelete');
+        toast.error(ERROR_MESSAGES.UNKNOWN_ERROR);
       }
     }
   };
@@ -353,11 +335,11 @@ const AdminPanel = () => {
                       <SelectValue placeholder="Seleccionar categoría" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Habitaciones alquiler">Habitaciones alquiler</SelectItem>
-                      <SelectItem value="Inversiones">Inversiones</SelectItem>
-                      <SelectItem value="Propiedades en venta">Propiedades en venta</SelectItem>
-                      <SelectItem value="Propiedades en alquiler">Propiedades en alquiler</SelectItem>
-                      <SelectItem value="Obras">Obras</SelectItem>
+                      {PROPERTY_CATEGORIES.map(cat => (
+                        <SelectItem key={cat.value} value={cat.value}>
+                          {cat.label}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 </div>

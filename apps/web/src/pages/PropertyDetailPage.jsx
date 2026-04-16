@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { MapPin, Euro, ChevronRight, Mail, Phone, CheckCircle2 } from 'lucide-react';
@@ -10,30 +10,20 @@ import { Separator } from '@/components/ui/separator';
 import Header from '@/components/Header.jsx';
 import Footer from '@/components/Footer.jsx';
 import LoadingSpinner from '@/components/LoadingSpinner.jsx';
+import { usePocketbaseGetOne } from '@/hooks/usePocketbaseQuery';
+import { logError } from '@/lib/logger';
 import pb from '@/lib/pocketbaseClient';
 
 const PropertyDetailPage = () => {
   const { id } = useParams();
-  const [property, setProperty] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
 
-  useEffect(() => {
-    const fetchProperty = async () => {
-      try {
-        const record = await pb.collection('properties').getOne(id, {
-          $autoCancel: false
-        });
-        setProperty(record);
-      } catch (error) {
-        console.error('Error fetching property:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // Usar hook personalizado para obtener una propiedad
+  const { data: property, loading, error } = usePocketbaseGetOne('properties', id);
 
-    fetchProperty();
-  }, [id]);
+  if (error) {
+    logError(error, `PropertyDetailPage.usePocketbaseGetOne(${id})`);
+  }
 
   if (loading) {
     return (

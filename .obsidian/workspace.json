@@ -4,11 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "dd8b26c2b37a84a1",
+        "id": "a2f445fd70a57bf0",
         "type": "tabs",
         "children": [
           {
-            "id": "e6c3486287700561",
+            "id": "a451e6357e505850",
             "type": "leaf",
             "state": {
               "type": "empty",
@@ -176,21 +176,21 @@
       "bases:Crear nueva base": false
     }
   },
-  "active": "e6c3486287700561",
+  "active": "a451e6357e505850",
   "lastOpenFiles": [
-    "DEPLOYMENT_GUIDE.md",
     "project_documentation.md",
+    "apps/web/node_modules",
+    "apps/web/src/components/ui/tooltip.jsx",
+    "apps/web/src/components/ui/toggle.jsx",
+    "apps/web/src/components/ui/toggle-group.jsx",
+    "apps/web/src/components/ui/toaster.jsx",
+    "apps/web/src/components/ui/toast.jsx",
+    "apps/web/src/components/ui/textarea.jsx",
+    "apps/web/src/components/ui/tabs.jsx",
+    "apps/web/src/components/ui/table.jsx",
+    "apps/web/src/components/ui/switch.jsx",
+    "DEPLOYMENT_GUIDE.md",
     "keys.md",
-    "database/pocketbase",
-    "database/pb_migrations/1776161318_updated_properties.js",
-    "database/pb_migrations/1776161310_updated_users.js",
-    "database/pb_migrations/1773824320_002_seed_properties_15_records.js",
-    "database/pb_migrations/1773824296_001_created_favorites.js",
-    "database/pb_migrations/1773824294_001_created_properties.js",
-    "database/pb_migrations/1769164585_set_rate_limits.js",
-    "database/pb_migrations/1769159103_disable_auth_alert_superusers.js",
-    "database/pb_migrations/1759383931_initial_app_settings.js",
-    "database/pb_migrations",
     "database/pb_data/storage/pbc_2224901212/000000000000001/thumbs_222336_7sw1d97ur5.jpg/100x100_222336_7sw1d97ur5.jpg",
     "database/pb_data/storage/pbc_2224901212/000000000000001/thumbs_222336_7sw1d97ur5.jpg",
     "database/pb_data/storage/pbc_2224901212/000000000000001/222336_7sw1d97ur5.jpg",

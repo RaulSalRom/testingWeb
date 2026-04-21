@@ -2,8 +2,8 @@
 RewriteEngine On
 
 # Redirección HTTPS (recomendado)
-# RewriteCond %{HTTPS} off
-# RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
 
 # Single Page Application
 RewriteCond %{REQUEST_FILENAME} !-f

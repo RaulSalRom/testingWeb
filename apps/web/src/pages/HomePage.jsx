@@ -14,7 +14,6 @@ import { logError } from '@/lib/logger';
 const HomePage = () => {
   // Obtener propiedades destacadas (las 4 más recientes) usando hook centralizado
   const { data: featuredProperties, loading, error } = usePocketbaseQuery('properties', {
-    sort: '-created',
     limit: 4
   });
 

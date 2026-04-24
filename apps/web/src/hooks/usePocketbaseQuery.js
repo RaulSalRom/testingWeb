@@ -124,13 +124,15 @@ export const usePocketbaseQuery = (collection, options = {}, dependencies = []) 
       setLoading(true);
 
       // Hacer la query a PocketBase
-      const records = await pb.collection(collection).getFullList({
-        sort: options.sort || '-created',
+      // Build query params - omit sort entirely unless explicitly provided (PB 0.37 bug with system field sort)
+      const queryParams = {
         limit: options.limit || 500,
         offset: options.offset || 0,
+        ...(options.sort && { sort: options.sort }),
         ...(options.filter && { filter: options.filter }),
         ...(options.expand && { expand: options.expand })
-      });
+      };
+      const records = await pb.collection(collection).getFullList(queryParams);
 
       // Guardar datos
       setData(records);

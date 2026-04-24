@@ -36,25 +36,4 @@ testingWeb/
 - **Panel de administración** para gestión de propiedades
 - **Scroll a categorías** desde la Home y página de propiedades
 
-## 🔧 Desarrollo local
-
-```bash
-git clone https://github.com/RaulSalRom/testingWeb.git
-cd testingWeb/apps/web
-npm install
-npm run dev
-```
-
-Configura la URL de PocketBase en `src/lib/pocketbaseClient.js`.
-
-## 🌐 Producción
-
-```bash
-npm run build
-```
-
-El build se genera en `dist/apps/web/`. Súbelo al `public_html/` de tu hosting.
-
----
-
 > Proyecto desarrollado para **Corina Capital**. 2026.

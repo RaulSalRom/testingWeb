@@ -1,0 +1,24 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build output
+dist/
+
+# Environment
+.env
+.env.local
+.env.production
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Obsidian
+.obsidian/
+
+# Deployment scripts
+build-production.sh
+prepare-for-hostinger.sh
+deploy-to-hostinger.sh
+hostinger-build/

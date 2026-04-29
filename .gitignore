@@ -22,3 +22,6 @@ build-production.sh
 prepare-for-hostinger.sh
 deploy-to-hostinger.sh
 hostinger-build/
+
+# Plugins de editor visual (no código fuente)
+apps/web/plugins/
